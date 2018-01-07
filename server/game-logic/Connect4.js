@@ -2,6 +2,9 @@ class Connect4 {
   constructor() {
     this.board = [];
     this.player = 0;
+    this.numberOfMoves = 0;
+    this.isTieGame = false;
+    this.isWinner = false;
   }
 
   initBoard() {
@@ -22,22 +25,30 @@ class Connect4 {
   }
 
   dropPiece(col) {
+    if (this.isWinner || this.isTieGame) return null;
+
     for (let rowIndex = 6; rowIndex >= 0; rowIndex--) {
       if (this.isValidMove(rowIndex, col)) {
         this.placePiece(rowIndex, col, this.player);
-        return {row: rowIndex, col};
+        
+        this.numberOfMoves++;
+
+        if (this.checkForWinner({row: rowIndex, col})) this.isWinner = true;
+        if (this.numberOfMoves === 49 && !this.isWinner) this.isTieGame = true;
+
+        return true;
       }
     }
 
-    return null;
     // throw new Error('Invalid move!');
+    return null;
   }
 
   isValidMove(row, col) {
     return this.board[row][col] === null;
   }
 
-  checkWinner({row, col}) {
+  checkForWinner({row, col}) {
     return this.checkRowForWinner(row, col) ||
       this.checkColForWinner(row, col) ||
       this.checkDiagonalsForWinner(row, col);
@@ -124,4 +135,4 @@ class Connect4 {
   }
 }
 
-export default Connect4;
+module.exports = Connect4;
