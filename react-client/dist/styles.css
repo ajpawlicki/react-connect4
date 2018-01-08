@@ -26,8 +26,9 @@ body {
   margin: 1rem 1rem 0 0;
 }
 
-.header-col {
+.header-col-1 {
   width: 120px;
+  margin-right: 1rem;
 }
 
 .header-container h2 {
@@ -44,4 +45,13 @@ body {
 
 .footer-container {
   margin-top: 1rem;
+  font-weight: bold;
+}
+
+.player-1 {
+  color: #663399;
+}
+
+.player-2 {
+  color: #ffd700;
 }
