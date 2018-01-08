@@ -11,7 +11,7 @@ const GameBoardRow = props => {
             className="board-cell"
             onClick={() => props.handleCellClick(colIndex)}
           >
-            {cell}
+            {cell ? <i className={`fa fa-futbol-o fa-2x player-${cell}`} aria-hidden="true"></i> : null}
           </td>
         );
       })}
