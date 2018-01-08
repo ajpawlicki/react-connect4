@@ -1,28 +1,23 @@
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
-import GameBoardCell from './GameBoardCell.jsx';
-
-class GameBoardRow extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <tr>
-        {this.props.row.map((cell, colIndex) => {
-          return <GameBoardCell
-            cell={cell}
+const GameBoardRow = props => {
+  return (
+    <tr className="board-row">
+      
+      {props.row.map((cell, colIndex) => {
+        return (
+          <td
             key={colIndex}
-            colIndex={colIndex}
-            rowIndex={this.props.rowIndex}
-            handleCellClick={this.props.handleCellClick} />
-        })}
-      </tr>
-    );
-  }
+            className="board-cell"
+            onClick={() => props.handleCellClick(colIndex)}
+          >
+            {cell}
+          </td>
+        );
+      })}
 
-}
+    </tr>
+  );
+};
 
 export default GameBoardRow;
