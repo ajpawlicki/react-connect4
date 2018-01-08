@@ -117,19 +117,23 @@ class App extends Component {
         <div className="header-container">
           <h2>Connect Four</h2>
           
-          <div className="header-col">
+          <div className="header-col-1">
             <h4>{!this.state.isWinner && !this.state.isTieGame ? `Player ${this.state.player}'s turn` : 'Game over'}</h4>
             <span className="restart-button" onClick={this.handleRestartButtonClick}>Restart</span>
+          </div>
+
+          <div className="header-col-2">
+            <i className={`fa fa-futbol-o fa-3x player-${this.state.player}`} aria-hidden="true"></i>
           </div>
         </div>
 
         <GameBoard board={this.state.board} handleCellClick={this.handleCellClick} />
 
         <div className="footer-container">
-          {this.state.isWinner ? <span className="alert">Player {this.state.player} wins!</span> : null}
+          {this.state.isWinner ? <span className="alert">Player {this.state.player} <i className={`fa fa-futbol-o fa-1x player-${this.state.player}`} aria-hidden="true"></i> wins!</span> : null}
           {this.state.isTieGame ? <span className="alert">Tie game!</span> : null}
           {this.state.isInvalidMove ? <span className="alert">Invalid move.</span> : null}
-          {this.state.isLoadingData ? <span className="alert">Loading...</span> : null}
+          {this.state.isLoadingData ? <i className="fa fa-spinner fa-spin fa-2x fa-fw"></i> : null}
           {this.state.errorRetrievingData ? <span className="alert">There was an error.</span> : null}
         </div>
       </div>
