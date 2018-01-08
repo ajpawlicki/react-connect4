@@ -1,24 +1,23 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
 import GameBoard from './GameBoard.jsx';
 
 class App extends Component {
   constructor(props) {
     super(props);
-
-    this.fetchGame();
     
     this.state = {
       board: [],
-      player: null,
+      player: 1,
       isWinner: false,
       isTieGame: false,
+      isInvalidMove: false,
+      isLoadingData: false,
       errorRetrievingData: false,
-      isLoadingData: false
     };
 
     this.handleCellClick = this.handleCellClick.bind(this);
+    this.handleRestartButtonClick = this.handleRestartButtonClick.bind(this);
   }
   
   fetchGame() {
@@ -33,8 +32,9 @@ class App extends Component {
       this.setState({
         board: data.board,
         player: data.player,
+        isWinner: data.isWinner,
+        isTieGame: data.isTieGame,
         isLoadingData: false,
-        errorRetrievingData: false
       });
     })
     .catch(err => {
@@ -52,7 +52,8 @@ class App extends Component {
 
     this.setState({
       isLoadingData: true,
-      errorRetrievingData: false
+      errorRetrievingData: false,
+      isInvalidMove: false
     });
 
     fetch('postMove', {
@@ -65,13 +66,9 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(data => {
-      if (data.isWinner) this.setState({ isWinner: true });
-      if (data.isTieGame) this.setState({ isTieGame: true });
+      if (data.error === 'Invalid move.') this.setState({ isInvalidMove: true });
 
-      this.setState({
-        errorRetrievingData: false,
-        isLoadingData: false
-      });
+      this.setState({ isLoadingData: false });
 
       this.fetchGame();
     })
@@ -85,15 +82,56 @@ class App extends Component {
     });
   }
 
+  handleRestartButtonClick() {
+    this.setState({
+      isLoadingData: true,
+      isWinner: false,
+      isTieGame: false,
+      errorRetrievingData: false,
+      isInvalidMove: false
+    });
+
+    fetch('restartGame', { method: 'PUT' })
+    .then(res => {
+      this.setState({ isLoadingData: false });
+
+      this.fetchGame();
+    })
+    .catch(err => {
+      console.error(err);
+
+      this.setState({
+        isLoadingData: false,
+        errorRetrievingData: true
+      });
+    });
+  }
+
+  componentDidMount() {
+    this.fetchGame();
+  }
+
   render() {
     return (
       <div>
-        {this.state.isWinner ? <span className="alert">Player {this.player} wins!</span> : null}
-        {this.state.isTieGame ? <span className="alert">Tie game!</span> : null}
-        {this.state.isLoadingData ? <span className="alert">Loading...</span> : null}
-        {this.state.errorRetrievingData ? <span className="alert">There was an error.</span> : null}
+        <div className="header-container">
+          <h2>Connect Four</h2>
+          
+          <div className="header-col">
+            <h4>{!this.state.isWinner && !this.state.isTieGame ? `Player ${this.state.player}'s turn` : 'Game over'}</h4>
+            <span className="restart-button" onClick={this.handleRestartButtonClick}>Restart</span>
+          </div>
+        </div>
 
         <GameBoard board={this.state.board} handleCellClick={this.handleCellClick} />
+
+        <div className="footer-container">
+          {this.state.isWinner ? <span className="alert">Player {this.state.player} wins!</span> : null}
+          {this.state.isTieGame ? <span className="alert">Tie game!</span> : null}
+          {this.state.isInvalidMove ? <span className="alert">Invalid move.</span> : null}
+          {this.state.isLoadingData ? <span className="alert">Loading...</span> : null}
+          {this.state.errorRetrievingData ? <span className="alert">There was an error.</span> : null}
+        </div>
       </div>
     );
   }
