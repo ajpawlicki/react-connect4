@@ -17,24 +17,23 @@ app.get('/fetchGame', (req, res) => {
 
 app.post('/postMove', (req, res) => {
   const { col } = req.body;
-
-  const move = game.dropPiece(col);
-
+  
   const data = {};
 
-  if (move) {
-    if (game.isWinner) data.isWinner = true;
-    if (game.isTieGame) data.isWinner = true;
-    
-    if (!game.isWinner && !game.isTieGame) game.togglePlayer();
-    
-    res.send(data);
-  } else {
-    data.error = 'Invalid move.';
-    
-    res.send(data);
+  try {
+    game.dropPiece(col);
+  } catch (err) {
+    data.error = err.message;
   }
 
+  res.send(data);
+});
+
+app.put('/restartGame', (req, res) => {
+  game = new Connect4();
+  game.initBoard();
+
+  res.end();
 });
 
 app.listen(4000, () => console.log('Listening on port 4000!'));
