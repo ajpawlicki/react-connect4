@@ -1,0 +1,47 @@
+body {
+  font-family: Helvetica Neue;
+  text-align: center;
+}
+
+.board {
+  margin: auto;
+  border-collapse: collapse;
+}
+
+.board-cell {
+  width: 45px;
+  height: 45px;
+  border: 1px solid;
+}
+
+.header-container {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-container h2 {
+  margin: 1rem 1rem 0 0;
+}
+
+.header-col {
+  width: 120px;
+}
+
+.header-container h2 {
+  vertical-align: middle;
+}
+
+.restart-button {
+  border: 1px solid;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.footer-container {
+  margin-top: 1rem;
+}
