@@ -1,7 +1,7 @@
 class Connect4 {
   constructor() {
     this.board = [];
-    this.player = 0;
+    this.player = 1;
     this.numberOfMoves = 0;
     this.isTieGame = false;
     this.isWinner = false;
@@ -17,7 +17,7 @@ class Connect4 {
   }
 
   togglePlayer() {
-    this.player = this.player === 0 ? 1 : 0;
+    this.player = this.player === 1 ? 2 : 1;
   }
 
   placePiece(row, col, player) {
@@ -25,7 +25,7 @@ class Connect4 {
   }
 
   dropPiece(col) {
-    if (this.isWinner || this.isTieGame) return null;
+    if (this.isWinner || this.isTieGame) return;
 
     for (let rowIndex = 6; rowIndex >= 0; rowIndex--) {
       if (this.isValidMove(rowIndex, col)) {
@@ -36,12 +36,13 @@ class Connect4 {
         if (this.checkForWinner({row: rowIndex, col})) this.isWinner = true;
         if (this.numberOfMoves === 49 && !this.isWinner) this.isTieGame = true;
 
-        return true;
+        if (!this.isWinner && !this.isTieGame) this.togglePlayer();
+        
+        return;
       }
     }
 
-    // throw new Error('Invalid move!');
-    return null;
+    throw new Error('Invalid move.');
   }
 
   isValidMove(row, col) {
