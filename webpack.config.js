@@ -1,15 +1,21 @@
-const path = require('path');
+const SRC = __dirname + '/react-client/src';
+const DIST = __dirname + '/react-client/dist';
 
 module.exports = {
-  entry: './react-client/src/Index.jsx',
+  entry: SRC + '/Index.jsx',
   output: {
-    path: path.resolve('./react-client/dist/'),
+    path: DIST,
     filename: 'bundle.js'
   },
-  module : {
+  module: {
     loaders: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
+      {
+        include: SRC,
+        loader: 'babel-loader',
+        query: {
+          presets: ['react', 'env']
+        }
+      }
     ]
   }
 }
